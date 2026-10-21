@@ -67,7 +67,28 @@ const DATA = {
      pinned: 상단에 고정된 대화 (messages에 대화 내용을 넣을 수 있어요)
      threads: 목록. h = 몇 시간 전 */
   pinned: [
-    { id: "jiwoo", name: "우지우", initial: "우", avatar: "images/jiwoo.jpg", messages: [] }
+    { id: "jiwoo", name: "우지우", initial: "우", avatar: "images/jiwoo.jpg",
+    messages: [
+      { stamp: "그저께 오후 9:41" },
+      { from: "them", text: "바보" },
+      { from: "me",   text: "ㅎㅎ" },
+      { stamp: "어제 오전 8:52" },
+      { from: "them", text: "멍청아" },
+      { from: "me",   text: "지우는 바보" },
+      { from: "them", text: "아닌데" },
+      { from: "me",   text: "맞는데" },
+      { from: "them", text: "형이 더" },
+      { from: "them", text: "바보" },
+      { from: "them", text: "똥개" },
+      { from: "them", text: "해삼 말미잘" },
+      { from: "me",   text: "지ㅜ가 더" },
+      { from: "them", text: "지ㅜ" },
+      { from: "me",   text: "지우" },
+      { stamp: "오늘 오전 7:18" },
+      { from: "me",   text: "사랑해" },
+      { from: "them", text: "ㅋ" },
+      { from: "them", text: "나도" }
+    ] }
   ],
   threads: [
     { name: "+82 2-0000-1204", h: 2,
@@ -86,7 +107,31 @@ const DATA = {
 
   /* ---------- 사진 (추후 첨부) ----------
      예: { src: "images/01.jpg", title: "제목", date: "2026. 9. 11.", place: "장소" } */
-  photos: [],
+  photos: [
+    { src: "images/photos/p01.jpg", title: "", date: "", place: "" },
+    { src: "images/photos/p02.jpg", title: "", date: "", place: "" },
+    { src: "images/photos/p03.jpg", title: "", date: "", place: "" },
+    { src: "images/photos/p04.jpg", title: "", date: "", place: "" },
+    { src: "images/photos/p05.jpg", title: "", date: "", place: "" },
+    { src: "images/photos/p06.jpg", title: "", date: "", place: "" },
+    { src: "images/photos/p07.jpg", title: "", date: "", place: "" },
+    { src: "images/photos/p08.jpg", title: "", date: "", place: "" },
+    { src: "images/photos/p09.jpg", title: "", date: "", place: "" },
+    { src: "images/photos/p10.jpg", title: "", date: "", place: "" },
+    { src: "images/photos/p11.jpg", title: "", date: "", place: "" },
+    { src: "images/photos/p12.jpg", title: "", date: "", place: "" },
+    { src: "images/photos/p13.jpg", title: "", date: "", place: "" },
+    { src: "images/photos/p14.jpg", title: "", date: "", place: "" },
+    { src: "images/photos/p15.jpg", title: "", date: "", place: "" },
+    { src: "images/photos/p16.jpg", title: "", date: "", place: "" },
+    { src: "images/photos/p17.jpg", title: "", date: "", place: "" },
+    { src: "images/photos/p18.jpg", title: "", date: "", place: "" },
+    { src: "images/photos/p19.jpg", title: "", date: "", place: "" },
+    { src: "images/photos/p20.jpg", title: "", date: "", place: "" },
+    { src: "images/photos/p21.jpg", title: "", date: "", place: "" },
+    { src: "images/photos/p22.jpg", title: "", date: "", place: "" },
+    { src: "images/photos/p23.jpg", title: "", date: "", place: "" }
+  ],
 
   /* ---------- 메모 (추후 첨부) ----------
      본문 줄 앞에 "[ ] " 를 붙이면 체크리스트, "[x] " 는 체크된 항목이에요.
@@ -97,8 +142,41 @@ const DATA = {
      url에 애플뮤직 플레이리스트 링크를 붙여넣으면 앱 안에서 재생 화면이 떠요. */
   music: { title: "", url: "" },
 
-  /* ---------- 카카오톡 (추후 첨부) ----------
-     예: { name: "지우♡", time: "오후 2:10", unread: 0,
-           messages: [ { from: "them", text: "안녕" }, { from: "me", text: "응" } ] } */
-  kakao: []
+  /* ---------- 카카오톡 ----------
+     open: true 인 대화방만 눌러서 열려요. fav=즐겨찾기 별, muted=알림 끔, unread=안 읽은 개수 */
+  kakao: [
+    { name: "지우♡", avatar: "images/kakao/jiwoo.jpg", fav: true, time: "오후 2:10", open: true,
+      messages: [
+        { from: "them", text: "오늘 따뜻하게 입어", time: "오전 11:00" },
+        { from: "me",   text: "지우도", time: "오전 11:30" },
+        { from: "them", text: "따뜻하게", time: "오전 11:50" },
+        { from: "them", text: "목도리 두르고", time: "오전 11:50" },
+        { from: "them", text: "패딩 입고", time: "오전 11:50" },
+        { from: "them", text: "콧물", time: "오전 11:50" },
+        { from: "them", text: "흘리지 말고", time: "오전 11:50" },
+        { from: "me",   text: "콧물 안 흘려 바보", time: "오전 11:50" },
+        { from: "me",   text: "지우야아", time: "오전 11:50" },
+        { from: "me",   text: "학교 잘 다녀와", time: "오전 11:50" },
+        { from: "me",   text: "사랑해", time: "오전 11:50" },
+        { from: "them", img: "images/emoticon.png", time: "오후 1:30" },
+        { from: "me",   text: "바보", time: "오후 1:31" },
+        { from: "me",   text: "지우 주려고 쿠키 굽고 있어", time: "오후 1:31" },
+        { from: "me",   text: "얼른 와 ㅎㅎ", time: "오후 1:31" },
+        { from: "them", text: "벌써 보고 싶어", time: "오후 2:10" }
+      ] },
+    { name: "김실장", avatar: "images/kakao/kim.jpg", muted: true, time: "오후 1:22",
+      preview: "인터뷰 때 너무 딴길로 새지 마시고 아까 보내드린 모범 답안 위주로 ..." },
+    { name: "카카오톡", avatar: "images/icons/kakao.png", time: "오전 10:05",
+      preview: "[PC버전 자동로그인]" },
+    { name: "카카오톡 선물하기", avatar: "images/icons/kakao.png", time: "어제",
+      preview: "상품 유효기간이 7일 남았습니다. 유효기간 만료 전 사용하시거나 선물함에..." },
+    { name: "이지환 선생님", avatar: "images/kakao/lee.jpg", unread: 1, time: "어제",
+      preview: "선혜야~ 이번에 윤이상 준비하는 제자가 잠깐 연습하는 거 참관 ..." },
+    { name: "쿠팡", avatar: "images/kakao/coupang.jpg", time: "어제",
+      preview: "[쿠팡] 구매하신 상품은 어떠셨나요? ..." },
+    { name: "김주영", avatar: "images/kakao/jy.jpg", unread: 1, time: "10월 19일",
+      preview: "선혜야 나 기억나? 카톡 친구보고 생각나서 연락 ..." },
+    { name: "정부24", avatar: "images/kakao/gov24.jpg", time: "10월 14일",
+      preview: "메시지가 도착했습니다." }
+  ]
 };

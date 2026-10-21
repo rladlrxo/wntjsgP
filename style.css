@@ -203,23 +203,56 @@ button { font: inherit; color: inherit; border: 0; background: none; padding: 0;
 .mcard big { display: block; font-size: 3em; }
 
 /* 카카오톡 */
-.kk .nav .mid { font-weight: 700; }
-.kk .abody { background: #fff; }
-.krow { display: flex; gap: .8em; padding: .7em 1em; align-items: center; }
-.krow .avatar { width: 3em; height: 3em; font-size: .95em; margin: 0; border-radius: 1.1em; background: #e8e8ee; }
-.krow .km { flex: 1; min-width: 0; }
-.krow .kn { font-weight: 600; }
-.krow .kp { color: var(--gray); font-size: .88em; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; margin-top: .1em; }
-.krow .kt { text-align: right; font-size: .75em; color: var(--gray); }
-.krow .kt b { display: inline-block; background: #ff4d4f; color: #fff; border-radius: 1em; padding: .1em .55em; margin-top: .35em; font-weight: 600; }
-.kthread { background: #b2c7da; padding: .8em; display: flex; flex-direction: column; gap: .4em; }
-.kthread .bub.them { background: #fff; border-radius: .3em 1em 1em 1em; }
-.kthread .bub.me { background: #fee500; color: #000; border-radius: 1em .3em 1em 1em; }
+.app.kk { background: #fff; }
+.app.kk .abody { padding: 0; background: #fff; }
+.khead { display: flex; justify-content: space-between; align-items: center; padding: .55em 1.1em .5em; }
+.kttl { font-size: 1.75em; font-weight: 800; letter-spacing: -.02em; }
+.kic { display: flex; gap: 1.1em; } .kic svg { width: 1.45em; height: 1.45em; color: #111; }
+.kchips { display: flex; gap: .5em; padding: .3em 1.1em .8em; font-size: .86em; font-weight: 500; }
+.kchips span { padding: .62em 1.15em; border-radius: 2em; background: #f0f0f2; color: #333; display: flex; align-items: center; gap: .4em; }
+.kchips span.on { background: #1c1c1e; color: #fff; }
+.kchips b { background: #ff5a1f; color: #fff; border-radius: 1em; padding: .05em .55em; font-size: .9em; font-weight: 700; }
+.klist { padding-bottom: 6em; }
+.krow { display: flex; gap: .85em; padding: .72em 1.1em; align-items: flex-start; }
+.krow.open { cursor: pointer; } .krow.open:active { background: #f5f5f7; }
+.kav, .kpf { background: #e6e6ea center/cover no-repeat; flex-shrink: 0; }
+.kav { width: 3.3em; height: 3.3em; border-radius: 1.2em; }
+.km { flex: 1; min-width: 0; }
+.kn { display: flex; align-items: center; gap: .35em; font-weight: 700; font-size: 1.02em; }
+.knm { white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+.kn i { width: 1em; height: 1em; display: inline-flex; flex-shrink: 0; color: #9a9aa0; }
+.kn i svg { width: 100%; height: 100%; } .kfav svg { fill: #a8a8ae; } .kmute svg { stroke: #a8a8ae; }
+.kp { color: #77777c; font-size: .9em; margin-top: .22em; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+.kt { text-align: right; color: #8e8e93; font-size: .76em; min-width: 4.6em; display: flex; flex-direction: column; align-items: flex-end; gap: .55em; padding-top: .2em; }
+.kt b { background: #ff5a1f; color: #fff; border-radius: 1em; min-width: 2em; height: 2em; display: grid; place-items: center; font-size: 1.05em; padding: 0 .5em; }
+.ktab { position: absolute; left: 0; right: 0; bottom: 0; padding: .6em 0 2.4em; display: flex; justify-content: space-around; background: rgba(255,255,255,.94); border-top: 1px solid #ececef; }
+.ktab i { position: relative; width: 2.1em; height: 2.1em; color: #b4b4b9; display: block; }
+.ktab i svg { width: 100%; height: 100%; } .ktab i.on { color: #2c2c30; }
+.ktab b { position: absolute; top: -.5em; left: 55%; background: #ff5a1f; color: #fff; border-radius: 1em; font-size: .62em; min-width: 2.1em; height: 2.1em; display: grid; place-items: center; padding: 0 .5em; }
+/* 카톡 대화방 */
+.kchat .nav { background: #b2c7da; border: 0; } .kchat .nav .mid { font-weight: 700; } .kchat .nav .act svg { width: 1.3em; height: 1.3em; color: #111; }
+.kthread { background: #b2c7da; min-height: 100%; padding: .5em .8em 1.2em; display: flex; flex-direction: column; }
+.kdate { text-align: center; margin: .6em 0 1em; } .kdate span { background: rgba(0,0,0,.12); color: #fff; font-size: .72em; padding: .45em 1.2em; border-radius: 2em; }
+.kmsg { display: flex; align-items: flex-end; gap: .35em; margin-top: .25em; }
+.kmsg.first { margin-top: .75em; } .kmsg.me { justify-content: flex-end; } .kmsg.them { align-items: flex-start; gap: .55em; }
+.kmsg .kpf { width: 2.6em; height: 2.6em; border-radius: 1em; }
+.kcol { display: flex; flex-direction: column; max-width: 76%; }
+.kname { font-size: .78em; color: #333; margin: 0 0 .35em .2em; }
+.krowb { display: flex; align-items: flex-end; gap: .4em; }
+.kbub { padding: .55em .8em; border-radius: .45em .95em .95em .95em; background: #fff; font-size: .95em; line-height: 1.35; white-space: pre-wrap; word-break: break-word; }
+.kmsg.me .kbub { background: #fee500; border-radius: .95em .45em .95em .95em; }
+.kmsg:not(.first) .kbub { border-radius: .95em; }
+.kemo { width: 8.2em; height: auto; display: block; }
+.ktm { font-size: .62em; color: #4a5a68; white-space: nowrap; padding-bottom: .15em; }
+.kinput { position: absolute; left: 0; right: 0; bottom: 0; background: #fff; padding: .6em .8em 2.5em; display: flex; align-items: center; gap: .7em; border-top: 1px solid #ececef; }
+.kplus { font-size: 1.6em; color: #555; line-height: 1; } .kfield { flex: 1; height: 2.4em; border-radius: 1.2em; background: #f2f2f4; } .ksend { width: 2.2em; height: 2.2em; border-radius: 50%; background: #f2f2f4; display: grid; place-items: center; color: #999; }
+.kchat .abody { background: #b2c7da !important; padding-bottom: 6em; }
 
+/* ---- 아이콘 이미지 / 프로필 사진 ---- */
 .ico.img { background: none; overflow: visible; }
 .ico.img img { width: 100%; height: 100%; display: block; pointer-events: none; }
-.avatar[style*="background-image"] { background-size: cover; background-position: center; }
 .ico.img::after { content: ""; position: absolute; inset: 0; border-radius: 22.4%; box-shadow: inset 0 0 0 1px rgba(255,255,255,.16); pointer-events: none; }
+.avatar[style*="background-image"] { background-size: cover; background-position: center; }
 
 /* ---- 스와이프 영역 / 잠금화면 ---- */
 .swipezone { position: absolute; left: 0; right: 0; bottom: 0; height: 2.5em; z-index: 58; touch-action: none; cursor: pointer; }
@@ -246,3 +279,5 @@ button { font: inherit; color: inherit; border: 0; background: none; padding: 0;
 .pbar .badge { position: absolute; top: .1em; left: 52%; min-width: 1.9em; height: 1.9em; padding: 0 .45em; border-radius: 1em; background: #ff453a; color: #fff; font-size: 1.05em; font-weight: 600; display: grid; place-items: center; }
 .pbar .srch { width: 4.3em; height: 4.3em; border-radius: 50%; display: grid; place-items: center; color: #1c1c1e; }
 .pbar .srch svg { width: 1.7em; height: 1.7em; }
+
+.app.kchat { background: #b2c7da; }

@@ -195,7 +195,7 @@
     state = 'app';
     const v = render(`
       <div class="app ${o.cls || ''} ${o.white ? 'white' : ''}" style="position:absolute;inset:0">
-        <div class="nav">
+        <div class="nav" ${o.hideNav ? 'style="display:none"' : ''}>
           ${o.back ? `<button class="back" id="bk"><b>‹</b>${esc(o.backLabel || '')}</button>` : '<span></span>'}
           <span class="mid">${esc(o.mid || '')}</span>
           <span class="act">${o.act || ''}</span>
@@ -205,6 +205,7 @@
         ${o.footer || ''}
       </div>`, '', { darkText: true });
     const bk = v.querySelector('#bk'); if (bk) bk.onclick = o.back;
+    if (o.toBottom) { const ab = v.querySelector('#abody'); ab.scrollTop = ab.scrollHeight; }
     return v;
   }
 
@@ -292,10 +293,10 @@
   }
   function openThread(name, msgs, h, initial, avatar) {
     const stamp = h != null ? `<div class="stamp">${fmtStamp(h)}</div>` : '';
-    const bubbles = msgs.map(m => `<div class="bub ${m.from === 'me' ? 'me' : 'them'}">${esc(m.text)}</div>`).join('');
+    const bubbles = msgs.map(m => m.stamp ? `<div class="stamp">${esc(m.stamp)}</div>` : `<div class="bub ${m.from === 'me' ? 'me' : 'them'}">${esc(m.text)}</div>`).join('');
     const v = appView({
       back: openMessages, backLabel: '', cls: '', white: true,
-      mid: '',
+      mid: '', toBottom: true,
       body: `<div class="hnav"><div class="avatar" ${avatar ? `style="background-image:url('${esc(avatar)}')"` : ''}>${avatar ? '' : esc(initial || '👤')}</div><small>${esc(name)} ›</small></div><div class="thread">${stamp}${bubbles}</div>`,
       footer: `<div class="compose"><span class="plus">＋</span><span class="field">문자 메시지</span></div>`
     });
@@ -376,18 +377,58 @@
   }
 
   /* ---------- 카카오톡 ---------- */
+  const KI = {
+    search: '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round"><circle cx="10.5" cy="10.5" r="6.5"/><path d="m15.5 15.5 5 5"/></svg>',
+    newchat: '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M20 12.5A8 7.5 0 1 1 12 5h3"/><path d="M8 19.5l-2.6 2 .6-3.4"/><path d="M19 2.5v5M16.5 5h5"/></svg>',
+    gear: '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linejoin="round"><circle cx="12" cy="12" r="3.2"/><path d="M12 2.8l1.7 1.8 2.5-.4.9 2.4 2.3 1.2-.6 2.5 1.4 2.1-1.8 1.8.1 2.6-2.5.8-1.2 2.3-2.5-.5-2 1.5-2-1.5-2.5.5-1.2-2.3-2.5-.8.1-2.6L2.4 12l1.4-2.1-.6-2.5 2.3-1.2.9-2.4 2.5.4z"/></svg>',
+    star: '<svg viewBox="0 0 24 24"><path d="M12 2.5l2.9 6 6.6.9-4.8 4.6 1.2 6.5L12 17.4 6.1 20.5l1.2-6.5L2.5 9.4l6.6-.9z"/></svg>',
+    mute: '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M6 17h12l-1.6-2.2V10a4.4 4.4 0 0 0-8.8 0v4.8z"/><path d="M10 20a2 2 0 0 0 4 0M3.5 3.5l17 17"/></svg>',
+    person: '<svg viewBox="0 0 24 24" fill="currentColor"><circle cx="12" cy="8" r="4.2"/><path d="M4 20.5c.6-4 4-5.6 8-5.6s7.400 1.600 8 5.600z"/></svg>',
+    chat: '<svg viewBox="0 0 24 24" fill="currentColor"><path d="M12 3C6.500 3 2.500 6.500 2.500 11c0 2.800 1.600 5.200 4 6.700L5.800 21l4.200-2.300c.6.100 1.300.2 2 .2 5.500 0 9.500-3.500 9.500-7.900S17.500 3 12 3z"/></svg>',
+    play: '<svg viewBox="0 0 24 24" fill="currentColor"><path d="M12 4C7 4 3 7.300 3 11.500c0 2.200 1 4.100 2.700 5.400L5 20l3.700-2c.7.200 1.500.3 2.300.3 5 0 9-3.300 9-7.500S17 4 12 4zm-1.500 5l4.500 2.800-4.500 2.800z"/></svg>',
+    bag: '<svg viewBox="0 0 24 24" fill="currentColor"><path d="M5 8h14l1 12.500H4z"/><path d="M8.500 8V6.500a3.500 3.500 0 0 1 7 0V8" fill="none" stroke="currentColor" stroke-width="2"/></svg>',
+    more: '<svg viewBox="0 0 24 24" fill="currentColor"><circle cx="5" cy="12" r="2"/><circle cx="12" cy="12" r="2"/><circle cx="19" cy="12" r="2"/></svg>'
+  };
   function openKakao() {
-    const ks = D.kakao;
-    const body = ks.length
-      ? ks.map((k, i) => `<div class="krow" data-i="${i}"><div class="avatar">${esc((k.name || '?')[0])}</div><div class="km"><div class="kn">${esc(k.name)}</div><div class="kp">${esc((k.messages[k.messages.length - 1] || {}).text || '')}</div></div><div class="kt">${esc(k.time || '')}${k.unread ? `<br><b>${k.unread}</b>` : ''}</div></div>`).join('')
-      : `<div class="empty"><b>채팅방이 없어요</b></div>`;
-    const v = appView({ mid: '채팅', cls: 'kk', white: true, body });
+    const ks = D.kakao, unreadSum = ks.reduce((s, k) => s + (k.unread || 0), 0);
+    const rows = ks.map((k, i) => {
+      const last = (k.messages && k.messages.length) ? k.messages[k.messages.length - 1] : null;
+      const pv = k.preview || (last ? (last.img ? '이모티콘을 보냈습니다.' : last.text) : '');
+      return `<div class="krow ${k.open ? 'open' : ''}" data-i="${i}">
+        <div class="kav" style="background-image:url('${esc(k.avatar || '')}')"></div>
+        <div class="km"><div class="kn"><span class="knm">${esc(k.name)}</span>${k.fav ? `<i class="kfav">${KI.star}</i>` : ''}${k.muted ? `<i class="kmute">${KI.mute}</i>` : ''}</div>
+          <div class="kp">${esc(pv)}</div></div>
+        <div class="kt"><span>${esc(k.time || '')}</span>${k.unread ? `<b>${k.unread}</b>` : ''}</div></div>`;
+    }).join('');
+    const v = appView({ cls: 'kk', white: true, hideNav: true, body: `
+      <div class="khead"><span class="kttl">채팅</span><span class="kic">${KI.search}${KI.newchat}${KI.gear}</span></div>
+      <div class="kchips"><span class="on">전체</span><span>안읽음 ${unreadSum ? `<b>${unreadSum}</b>` : ''}</span><span>통화</span></div>
+      <div class="klist">${rows}</div>`,
+      footer: `<div class="ktab"><i>${KI.person}</i><i class="on">${KI.chat}${unreadSum ? `<b>${unreadSum}</b>` : ''}</i><i>${KI.play}</i><i>${KI.bag}</i><i>${KI.more}</i></div>` });
     v.querySelector('#abody').onclick = e => {
-      const r = e.target.closest('.krow'); if (!r) return;
-      const k = ks[+r.dataset.i];
-      appView({ back: openKakao, backLabel: '', mid: k.name, cls: 'kk', white: true,
-        body: `<div class="kthread" style="min-height:100%">${k.messages.map(m => `<div class="bub ${m.from === 'me' ? 'me' : 'them'}">${esc(m.text)}</div>`).join('')}</div>` });
+      const r = e.target.closest('.krow.open'); if (!r) return;
+      openKakaoChat(+r.dataset.i);
     };
+  }
+  function openKakaoChat(i) {
+    const k = D.kakao[i], msgs = k.messages || [];
+    const t = new Date();
+    let html = `<div class="kdate"><span>${t.getFullYear()}년 ${t.getMonth() + 1}월 ${t.getDate()}일 ${DAYS[t.getDay()]}요일</span></div>`;
+    msgs.forEach((m, n) => {
+      const me = m.from === 'me', prev = msgs[n - 1], next = msgs[n + 1];
+      const first = !prev || prev.from !== m.from || prev.time !== m.time;
+      const lastOfGroup = !next || next.from !== m.from || next.time !== m.time;
+      const body = m.img ? `<img class="kemo" src="${esc(m.img)}" alt="">` : `<div class="kbub">${esc(m.text)}</div>`;
+      const time = lastOfGroup ? `<span class="ktm">${esc(m.time || '')}</span>` : '';
+      if (me) html += `<div class="kmsg me ${first ? 'first' : ''}">${time}${body}</div>`;
+      else html += `<div class="kmsg them ${first ? 'first' : ''}">
+        <div class="kpf" style="${first ? `background-image:url('${esc(k.avatar || '')}')` : 'visibility:hidden'}"></div>
+        <div class="kcol">${first ? `<div class="kname">${esc(k.name)}</div>` : ''}<div class="krowb">${body}${time}</div></div></div>`;
+    });
+    appView({ back: openKakao, backLabel: '', mid: k.name, cls: 'kk kchat', white: true,
+      act: `<span class="kti">${KI.search}</span>`, toBottom: true,
+      body: `<div class="kthread">${html}</div>`,
+      footer: `<div class="kinput"><span class="kplus">＋</span><span class="kfield"></span><span class="ksend">#</span></div>` });
   }
 
   lock();
