@@ -1,110 +1,102 @@
 /* ============================================================
-   ✏️ 여기만 고치면 됩니다! (캐릭터 정보 / 앱 내용)
-   - 이미지는 images/ 폴더에 넣고 경로만 적으세요. 비워두면 이모지/색으로 대체됩니다.
-   - 문자열은 반드시 따옴표("")로 감싸고, 항목 사이에는 쉼표(,)를 넣어주세요.
+   내용은 여기서 바꾸면 돼요
+   - 글자만 고치면 됩니다. 따옴표(" ")와 쉼표(,)는 지우지 마세요.
+   - 사진은 images/ 폴더에 넣고 경로만 적으세요. (예: "images/a.jpg")
+   - 시간은 "몇 시간 전"(h)으로 적어요. 보는 사람의 휴대폰 시간 기준으로
+     '오후 3:12 / 어제 / 월요일 / 2026. 10. 3.' 처럼 자동으로 바뀌어요.
    ============================================================ */
 
-const PHONE = {
-  owner: "하 린",              // 휴대폰 주인(자캐) 이름
-  wallpaper: "",               // 배경화면 이미지 경로 (예: "images/wall.jpg"), 비우면 그라데이션
-  wallpaperGradient: "linear-gradient(160deg,#2b2d42,#8d99ae)",
-  lockMessage: "엿보지 마세요 👀",   // 처음 잠금화면 문구
-  password: "0412",            // 잠금 비밀번호 (빈 문자열 "" 이면 잠금 없음)
-  passwordHint: "힌트: 생일(월일)", // 비밀번호 힌트 (원치 않으면 "")
-  accent: "#4f8cff"
-};
+const DATA = {
+  owner: "주선혜",
+  passcode: "0223",
+  wallpaper: "",            // 비우면 검은색 단색. 사진을 쓰려면 "images/wall.jpg"
 
-/* 홈 화면에 보일 앱 (apps에 없는 건 자동으로 숨김) */
-const HOME_APPS = ["messenger", "gallery", "memo", "search", "music", "contacts", "calendar", "twt"];
+  /* ---------- 홈 화면 ----------
+     앞에 *를 붙이면 '오래 안 써서 아이클라우드 다운로드 표시가 생긴 앱'이에요.
+     쓸 수 있는 이름: facetime photos camera notes clock maps weather
+                      appstore settings kakao youtube instagram coupang netflix */
+  homeRows: [
+    ["*facetime", "photos",    "camera",   "notes"],
+    ["clock",     "*maps",     "*weather", "appstore"],
+    ["settings",  "kakao",     "youtube",  "instagram"],
+    ["coupang",   "netflix"]
+  ],
+  dock: ["phone", "safari", "messages", "music"],
 
-/* ---------- 메신저 ---------- */
-const MESSENGER = [
-  {
-    name: "엄마", avatar: "👩", time: "오후 6:12",
-    messages: [
-      { from: "them", text: "밥은 먹고 다니니?" },
-      { from: "me",   text: "응 먹었어" },
-      { from: "them", text: "거짓말. 사진 보내봐" },
-      { from: "me",   text: "…나중에" }
-    ]
-  },
-  {
-    name: "단짝 ☆", avatar: "🐱", time: "오후 3:40",
-    messages: [
-      { from: "them", text: "야 오늘 갈 거지?" },
-      { from: "me",   text: "당연하지ㅋㅋ 늦으면 먼저 들어가 있어" },
-      { from: "them", text: "ㅇㅋ 자리 맡아둠" },
-      { from: "me",   text: "고마워 ㅠㅠ 커피는 내가 살게" }
-    ]
-  },
-  {
-    name: "모르는 번호", avatar: "❓", time: "어제",
-    messages: [
-      { from: "them", text: "기억해?" },
-      { from: "me",   text: "…누구세요" }
-    ]
-  }
-];
+  /* ---------- 전화: 연락처 ---------- */
+  contacts: [
+    { name: "지우♡",  number: "010-0000-0223" },
+    { name: "어머니", number: "010-0000-0505" }
+  ],
 
-/* ---------- 갤러리 (image 경로를 넣으면 사진으로 표시) ---------- */
-const GALLERY = [
-  { image: "", emoji: "🌆", caption: "퇴근길 노을" },
-  { image: "", emoji: "🍜", caption: "야식 인증" },
-  { image: "", emoji: "🐈", caption: "길고양이" },
-  { image: "", emoji: "🌧️", caption: "비 오는 날" },
-  { image: "", emoji: "📚", caption: "읽다 만 책" },
-  { image: "", emoji: "🎆", caption: "불꽃놀이" }
-];
+  /* ---------- 전화: 최근 기록 (위가 최근) ----------
+     t: in(수신) / out(발신) / missed(부재중),  h: 몇 시간 전
+     맨 위 한 화면은 전부 지우♡, 그 아래 오래된 기록은 070·국제전화(일 관련) */
+  recents: [
+    { n: "지우♡", t: "in",     h: 0.4 },
+    { n: "지우♡", t: "out",    h: 1.5 },
+    { n: "지우♡", t: "missed", h: 3.2 },
+    { n: "지우♡", t: "out",    h: 6 },
+    { n: "지우♡", t: "in",     h: 9.5 },
+    { n: "지우♡", t: "out",    h: 27 },
+    { n: "지우♡", t: "in",     h: 30 },
+    { n: "지우♡", t: "missed", h: 33 },
+    { n: "지우♡", t: "out",    h: 50 },
+    { n: "지우♡", t: "in",     h: 53 },
+    { n: "지우♡", t: "out",    h: 74 },
+    { n: "지우♡", t: "missed", h: 77 },
+    { n: "지우♡", t: "in",     h: 98 },
+    { n: "지우♡", t: "out",    h: 122 },
+    { n: "지우♡", t: "in",     h: 146 },
+    { n: "지우♡", t: "out",    h: 170 },
+    { n: "070-0412-8831",      t: "missed", h: 215, place: "대한민국" },
+    { n: "+1 202-555-0143",    t: "in",     h: 260, place: "미국" },
+    { n: "070-0731-2046",      t: "missed", h: 310, place: "대한민국" },
+    { n: "+44 7700 900318",    t: "missed", h: 380, place: "영국" },
+    { n: "+81 90-0000-4417",   t: "in",     h: 450, place: "일본" },
+    { n: "070-0188-5509",      t: "out",    h: 520, place: "대한민국" }
+  ],
 
-/* ---------- 메모 ---------- */
-const MEMOS = [
-  { title: "할 일", body: "- 월세 이체\n- 택배 찾기\n- 전화 답장 (미루는 중)" },
-  { title: "아무한테도 말 안 한 것", body: "사실 그날 일은 아직도 꿈에 나온다.\n그래도 괜찮은 척하는 건 이제 익숙하다." },
-  { title: "가사 메모", body: "새벽 세 시의 창가에서\n아무도 모르게 웃었어" }
-];
+  /* ---------- Safari ----------
+     즐겨찾기는 없음. 검색기록은 오래된 것 → 최근 순으로 적으세요. */
+  searches: ["리락쿠마", "아기치타", "햄스터 분양", "20대 커플링", "남자친구 선물"],
 
-/* ---------- 검색 기록 ---------- */
-const SEARCH_HISTORY = [
-  "잠 안 올 때 하는 것",
-  "고양이 간식 추천",
-  "그 사람 요즘 뭐함",
-  "심야 영화 상영",
-  "오래된 흉터 연고",
-  "이사 비용 견적"
-];
+  /* ---------- 문자 ----------
+     pinned: 상단에 고정된 대화 (messages에 대화 내용을 넣을 수 있어요)
+     threads: 목록. h = 몇 시간 전 */
+  pinned: [
+    { id: "jiwoo", name: "우지우", initial: "우", avatar: "images/jiwoo.jpg", messages: [] }
+  ],
+  threads: [
+    { name: "+82 2-0000-1204", h: 2,
+      messages: [{ from: "them", text: "[Web발신]\n****치과입니다.\n주선혜님의 예약은 10월 24일(토) 오후 2시 30분입니다.\n변경이 필요하시면 전화 부탁드립니다." }] },
+    { name: "+82 10-0000-3345", h: 20,
+      messages: [{ from: "them", text: "[Web발신]\n[한진택배]\n안녕하세요. 한진택배입니다.\n고객님의 물품을 금일 중 배송 예정입니다. 부재 시 문 앞에 놓아드리겠습니다." }] },
+    { name: "+82 10-0000-7782", h: 45,
+      messages: [{ from: "them", text: "[Web발신]\n[CJ대한통운_배송완료]\n일요일에도 신속하게!!\n고객님의 상품이 문 앞에 배송 완료되었습니다." }] },
+    { name: "+82 2-0000-9019", h: 100,
+      messages: [{ from: "them", text: "[외교부] 해외위급 상황 발생 시 영사안전콜센터로 연락하시기 바랍니다. 해외 체류 중 안전에 유의하세요." }] },
+    { name: "어머니", h: 140,
+      messages: [{ from: "them", text: "얼굴 좀 비추지" }] },
+    { name: "+82 1588-0000", h: 400,
+      messages: [{ from: "them", text: "[Web발신]\n(광고)[현대카드] 회원님, 요청하신 수신거부 처리가 정상적으로 완료되었습니다." }] }
+  ],
 
-/* ---------- 음악 (재생목록) ---------- */
-const MUSIC = {
-  nowPlaying: { title: "새벽 세 시", artist: "이름 모를 밴드", emoji: "🎧" },
-  playlist: [
-    "새벽 세 시 — 이름 모를 밴드",
-    "Blue Hour — Lumi",
-    "작은 방 — 오래된 필름",
-    "Run Away — NOVA"
-  ]
-};
+  /* ---------- 사진 (추후 첨부) ----------
+     예: { src: "images/01.jpg", title: "제목", date: "2026. 9. 11.", place: "장소" } */
+  photos: [],
 
-/* ---------- 연락처 ---------- */
-const CONTACTS = [
-  { name: "엄마",       number: "010-1234-5678" },
-  { name: "단짝 ☆",     number: "010-2222-3333" },
-  { name: "편의점 사장님", number: "010-9876-5432" },
-  { name: "(이름 없음)", number: "010-0000-0000" }
-];
+  /* ---------- 메모 (추후 첨부) ----------
+     본문 줄 앞에 "[ ] " 를 붙이면 체크리스트, "[x] " 는 체크된 항목이에요.
+     예: { title: "제목", date: "2026. 10. 3.", body: "첫 줄\n[ ] 할 일\n[x] 한 일" } */
+  notes: [],
 
-/* ---------- 캘린더 ---------- */
-const CALENDAR = [
-  { date: "10/25", title: "병원 예약" },
-  { date: "10/28", title: "단짝 생일 🎂" },
-  { date: "11/03", title: "??? (지우지 못한 일정)" }
-];
+  /* ---------- 애플뮤직 (추후 첨부) ----------
+     url에 애플뮤직 플레이리스트 링크를 붙여넣으면 앱 안에서 재생 화면이 떠요. */
+  music: { title: "", url: "" },
 
-/* ---------- 트위터 같은 SNS (비공개 계정 느낌) ---------- */
-const TWT = {
-  handle: "@rin_nocturne",
-  posts: [
-    { text: "오늘도 무사히 퇴근. 칭찬해줘.", time: "3시간 전" },
-    { text: "비 오는 날이 좋은 이유: 아무도 안 나와서.", time: "어제" },
-    { text: "(삭제된 트윗)", time: "3일 전" }
-  ]
+  /* ---------- 카카오톡 (추후 첨부) ----------
+     예: { name: "지우♡", time: "오후 2:10", unread: 0,
+           messages: [ { from: "them", text: "안녕" }, { from: "me", text: "응" } ] } */
+  kakao: []
 };
