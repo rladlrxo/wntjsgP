@@ -285,3 +285,30 @@ button { font: inherit; color: inherit; border: 0; background: none; padding: 0;
 .kinput { position: static; flex-shrink: 0; }
 .app.kchat .abody { padding-bottom: 0; min-height: 0; }
 .kthread { padding-bottom: 1.4em; }
+
+/* ---- 메모 (iOS 26, 라이트) ---- */
+.app.notes { background: #f2f2f7; }
+.app.notes .abody { padding: 0 0 9em; }
+.nnav { display: flex; justify-content: space-between; padding: .35em 1em 0; }
+.nbtn { width: 2.9em; height: 2.9em; border-radius: 50%; background: rgba(255,255,255,.9); box-shadow: 0 .1em .6em rgba(0,0,0,.12); display: grid; place-items: center; color: #1c1c1e; }
+.nbtn svg { width: 1.3em; height: 1.3em; }
+.nlarge { font-size: 2.7em; font-weight: 800; letter-spacing: -.02em; padding: .35em .42em .1em; }
+.nsec { font-size: 1.15em; font-weight: 700; padding: 1em 1.2em .45em; }
+.ngroup { margin: 0 .9em; background: #fff; border-radius: 1.7em; overflow: hidden; }
+.nitem { padding: .9em 1.3em; cursor: pointer; } .nitem:active { background: #f2f2f4; }
+.nitem + .nitem { border-top: 1px solid #e6e6ea; margin: 0 1.3em; padding-left: 0; padding-right: 0; }
+.nitem b { display: block; font-size: 1.1em; font-weight: 600; } .nitem span { color: #8e8e93; font-size: .95em; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; display: block; margin-top: .15em; }
+.nbottom { position: absolute; left: .9em; right: .9em; bottom: 2.9em; display: flex; gap: .65em; z-index: 30; }
+.nsearch, .ncomp { background: rgba(250,250,252,.88); backdrop-filter: blur(18px) saturate(1.6); -webkit-backdrop-filter: blur(18px) saturate(1.6); box-shadow: 0 .2em 1em rgba(0,0,0,.14), inset 0 0 0 1px rgba(255,255,255,.8); color: #1c1c1e; }
+.nsearch { flex: 1; height: 4.2em; border-radius: 2.2em; display: flex; align-items: center; gap: .6em; padding: 0 1.3em; }
+.nsearch svg { width: 1.4em; height: 1.4em; } .nsearch em { flex: 1; font-style: normal; color: #6e6e73; font-size: 1.05em; } .nsearch svg:last-child { color: #6e6e73; }
+.ncomp { width: 4.2em; height: 4.2em; border-radius: 50%; display: grid; place-items: center; } .ncomp svg { width: 1.6em; height: 1.6em; }
+.notedetail { background: #fff; }
+.ndate { text-align: center; color: #8e8e93; font-size: .8em; margin-top: 1.4em; }
+.nhead { font-size: 1.8em; font-weight: 800; padding: .5em .65em .2em; }
+.nbody .chk + div, .nbody > div { }
+.nbody { padding: .2em 1.1em 2em; line-height: 1.7; font-size: 1.06em; background: none; }
+/* ---- 음악 플레이어 ---- */
+.mplayer { margin: .6em 1em; border-radius: 1.2em; overflow: hidden; background: #000; aspect-ratio: 16 / 9; box-shadow: 0 .3em 1.2em rgba(0,0,0,.18); }
+.mplayer iframe { width: 100%; height: 100%; border: 0; display: block; }
+.mopen { display: block; text-align: center; color: #0a84ff; padding: .8em; font-size: .95em; text-decoration: none; }

@@ -136,11 +136,14 @@ const DATA = {
   /* ---------- 메모 (추후 첨부) ----------
      본문 줄 앞에 "[ ] " 를 붙이면 체크리스트, "[x] " 는 체크된 항목이에요.
      예: { title: "제목", date: "2026. 10. 3.", body: "첫 줄\n[ ] 할 일\n[x] 한 일" } */
-  notes: [],
+  notes: [
+    { title: "오늘 살 거", date: "오후 10:34",
+      body: "라면\n지우 간식\n킷캣?\n무화과\n요거트\n뭐 사지...\n리락쿠마 수면양말 ㅎㅎ\n지우 수면안대\n핫팩\n음 리락쿠마 수면양말부터 사야지" }
+  ],
 
-  /* ---------- 애플뮤직 (추후 첨부) ----------
-     url에 애플뮤직 플레이리스트 링크를 붙여넣으면 앱 안에서 재생 화면이 떠요. */
-  music: { title: "", url: "" },
+  /* ---------- 음악 (유튜브 플레이리스트 연동) ----------
+     url에 유튜브(또는 애플뮤직) 플레이리스트 링크를 붙여넣으면 앱 안에서 재생돼요. */
+  music: { title: "", url: "https://youtube.com/playlist?list=PLcoWEBXabJHI&si=m4h5EgSiu2URd2Ol" },
 
   /* ---------- 카카오톡 ----------
      open: true 인 대화방만 눌러서 열려요. fav=즐겨찾기 별, muted=알림 끔, unread=안 읽은 개수 */
@@ -162,7 +165,7 @@ const DATA = {
         { from: "me",   text: "바보", time: "오후 1:31" },
         { from: "me",   text: "지우 주려고 쿠키 굽고 있어", time: "오후 1:31" },
         { from: "me",   text: "얼른 와 ㅎㅎ", time: "오후 1:31" },
-        { from: "them", text: "벌써 보고 싶어", time: "오후 2:10" }
+        { from: "me",   text: "벌써 보고 싶어", time: "오후 2:10" }
       ] },
     { name: "김실장", avatar: "images/kakao/kim.jpg", muted: true, time: "오후 1:22",
       preview: "인터뷰 때 너무 딴길로 새지 마시고 아까 보내드린 모범 답안 위주로 ..." },

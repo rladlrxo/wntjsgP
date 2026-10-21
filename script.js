@@ -350,29 +350,49 @@
       return `<div>${esc(l) || '&nbsp;'}</div>`;
     }).join('');
   }
+  const NI = {
+    back: '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"><path d="M15 5l-7 7 7 7"/></svg>',
+    more: '<svg viewBox="0 0 24 24" fill="currentColor"><circle cx="5" cy="12" r="2"/><circle cx="12" cy="12" r="2"/><circle cx="19" cy="12" r="2"/></svg>',
+    search: '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round"><circle cx="10.5" cy="10.5" r="6.5"/><path d="m15.5 15.5 5 5"/></svg>',
+    mic: '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><rect x="9" y="3" width="6" height="11" rx="3" fill="currentColor"/><path d="M5.5 11.5a6.500 6.500 0 0 0 13 0M12 18v3"/></svg>',
+    compose: '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M18 13.500V18a2 2 0 0 1-2 2H6a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h4.500"/><path d="M19.500 3.500l1 1a1.400 1.400 0 0 1 0 2L12 15l-3.500.7L9 12.200l8.500-8.700a1.400 1.400 0 0 1 2 0z"/></svg>'
+  };
   function openNotes() {
     const ns = D.notes;
-    const body = ns.length
-      ? `<div class="list">${ns.map((n, i) => `<div class="nrow" data-i="${i}"><b>${esc(n.title)}</b><span>${esc(n.date || '')} ${esc((n.body || '').split('\n')[0].replace(/^\[( |x)\] ?/i, ''))}</span></div>`).join('')}</div><div class="pcount">${ns.length}개의 메모</div>`
-      : `<div class="empty"><b>메모 없음</b></div>`;
-    const v = appView({ large: '메모', white: false, body });
+    const items = ns.map((n, i) => `<div class="nitem" data-i="${i}"><b>${esc(n.title)}</b><span>${esc(n.date || '')}&nbsp; ${esc((n.body || '').split('\n')[0].replace(/^\[( |x)\] ?/i, ''))}</span></div>`).join('');
+    const body = `
+      <div class="nnav"><button class="nbtn" id="nbk">${NI.back}</button><span class="nbtn">${NI.more}</span></div>
+      <div class="nlarge">메모</div>
+      ${ns.length ? `<div class="nsec">오늘</div><div class="ngroup">${items}</div>` : `<div class="empty"><b>메모 없음</b></div>`}`;
+    const v = appView({ white: false, hideNav: true, cls: 'notes', body,
+      footer: `<div class="nbottom"><span class="nsearch">${NI.search}<em>검색</em>${NI.mic}</span><span class="ncomp">${NI.compose}</span></div>` });
+    v.querySelector('#nbk').onclick = home;
     v.querySelector('#abody').onclick = e => {
       const r = e.target.closest('[data-i]'); if (!r) return;
       const n = ns[+r.dataset.i];
-      appView({ back: openNotes, backLabel: '메모', white: true, body: `<div class="ntitle">${esc(n.title)}</div><div class="nbody">${noteHTML(n.body || '')}</div>` });
+      appView({ white: true, hideNav: true, cls: 'notes notedetail',
+        body: `<div class="nnav"><button class="nbtn" id="nbk2">${NI.back}</button><span class="nbtn">${NI.more}</span></div>
+          <div class="ndate">${esc(n.date || '')}</div>
+          <div class="nhead">${esc(n.title)}</div><div class="nbody">${noteHTML(n.body || '')}</div>` });
+      $('#nbk2').onclick = openNotes;
     };
   }
 
   /* ---------- 음악 ---------- */
+  function ytEmbed(url) {
+    try {
+      const u = new URL(url); const list = u.searchParams.get('list');
+      if (/youtube\.com|youtu\.be/.test(u.hostname) && list) return `https://www.youtube.com/embed/videoseries?list=${encodeURIComponent(list)}`;
+      if (/music\.apple\.com/.test(u.hostname)) return url.replace('://music.apple.com', '://embed.music.apple.com');
+    } catch (_) {}
+    return '';
+  }
   function openMusic() {
-    const m = D.music || {};
-    let body;
-    if (m.url) {
-      const emb = m.url.replace('://music.apple.com', '://embed.music.apple.com');
-      body = /embed\.music\.apple\.com/.test(emb)
-        ? `<iframe src="${esc(emb)}" allow="autoplay *; encrypted-media *; fullscreen *; clipboard-write" sandbox="allow-forms allow-popups allow-same-origin allow-scripts allow-top-navigation-by-user-activation"></iframe>`
-        : `<div class="mcard"><big>♪</big>${esc(m.title || '플레이리스트')}<br><a style="color:#fff" href="${esc(m.url)}" target="_blank" rel="noopener">열기</a></div>`;
-    } else body = `<div class="empty">재생 중인 음악이 없습니다.</div>`;
+    const m = D.music || {}; const emb = m.url ? ytEmbed(m.url) : '';
+    const body = emb
+      ? `<div class="mplayer"><iframe src="${esc(emb)}" allow="autoplay; encrypted-media; picture-in-picture; fullscreen; clipboard-write" referrerpolicy="strict-origin-when-cross-origin" allowfullscreen></iframe></div>
+         <a class="mopen" href="${esc(m.url)}" target="_blank" rel="noopener">플레이리스트 전체 보기 ›</a>`
+      : `<div class="empty">재생 중인 음악이 없습니다.</div>`;
     appView({ large: '지금 듣기', cls: 'music', white: true, body });
   }
 
