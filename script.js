@@ -13,7 +13,7 @@
   function pad2(n) { return String(n).padStart(2, '0'); }
   function tick() {
     const d = new Date();
-    $('#clock').textContent = (d.getHours() % 12 || 12) + ':' + pad2(d.getMinutes());
+    $('#clock').textContent = state === 'lock' && D.carrier ? D.carrier : (d.getHours() % 12 || 12) + ':' + pad2(d.getMinutes());
     const lt = $('#lockTime'); if (lt) lt.textContent = (d.getHours() % 12 || 12) + ':' + pad2(d.getMinutes());
   }
   setInterval(tick, 5000); tick();
@@ -43,6 +43,10 @@
   function render(html, cls, opt) {
     opt = opt || {};
     screen.innerHTML = `<div class="view ${cls || ''}">${html}</div>`;
+    phone.dataset.s = state;
+    phone.classList.toggle('lockico', state === 'lock');
+    phone.classList.toggle('face', state === 'passcode');
+    tick();
     phone.classList.toggle('dark-text', !!opt.darkText);
     phone.classList.toggle('hidden-ind', !!opt.hideInd);
     return screen.firstElementChild;
@@ -57,21 +61,30 @@
   }
   $('#power').onclick = () => { if (state !== 'off') off(); else lock(); };
 
+  /* ---------- 스와이프(위로 밀기 / 탭) ---------- */
+  function swipeUp(el, cb) {
+    let y0 = null, done = false;
+    el.addEventListener('pointerdown', e => { y0 = e.clientY; done = false; try { el.setPointerCapture(e.pointerId); } catch (_) {} });
+    el.addEventListener('pointermove', e => { if (y0 !== null && !done && y0 - e.clientY > 28) { done = true; cb(); } });
+    el.addEventListener('pointerup', e => { if (y0 !== null && !done && Math.abs(e.clientY - y0) < 10) { done = true; cb(); } y0 = null; });
+    el.addEventListener('pointercancel', () => { y0 = null; });
+  }
+
   /* ---------- 잠금화면 ---------- */
+  const FLASH = '<svg viewBox="0 0 24 24"><path d="M8 2h8v4.2l-1.6 3.1V21a2 2 0 0 1-2 2h-.8a2 2 0 0 1-2-2V9.3L8 6.2z"/><rect x="11.1" y="11" width="1.8" height="4" rx=".9" fill="#5a5a5e"/></svg>';
+  const CAM = '<svg viewBox="0 0 24 24"><path fill-rule="evenodd" d="M9 4 7.8 6H5a3 3 0 0 0-3 3v9a3 3 0 0 0 3 3h14a3 3 0 0 0 3-3V9a3 3 0 0 0-3-3h-2.8L15 4zM12 9.6a3.9 3.9 0 1 0 0 7.8 3.9 3.9 0 0 0 0-7.8z"/></svg>';
   function lock() {
     state = 'lock'; phone.classList.remove('face');
     const d = new Date();
     const v = render(`
-      <div class="lock wall" style="${wallStyle()}position:absolute;inset:0">
-        <div class="date">${d.getMonth() + 1}월 ${d.getDate()}일 ${DAYS[d.getDay()]}요일</div>
+      <div class="lock wall" style="${wallStyle()}position:absolute;inset:0;color:#fff">
+        <div class="date">${d.getMonth() + 1}월 ${d.getDate()}일 (${DAYS[d.getDay()]})</div>
         <div class="time" id="lockTime"></div>
-        <div class="tools"><span>🔦</span><span>📷</span></div>
-        <div class="swipe">위로 쓸어올리거나 눌러서 열기</div>
+        <div class="lbtn" style="left:18.5%">${FLASH}</div>
+        <div class="lbtn" style="left:81%">${CAM}</div>
       </div>`, '', { hideInd: false });
     tick();
-    let y0 = null;
-    v.onpointerdown = e => { y0 = e.clientY; };
-    v.onpointerup = e => { if (y0 !== null) { passcode(); y0 = null; } };
+    swipeUp(v, passcode);
   }
 
   /* ---------- 암호 ---------- */
@@ -175,7 +188,7 @@
       else { b.classList.remove('nope'); void b.offsetWidth; b.classList.add('nope'); }
     };
   }
-  $('#homeind').onclick = () => { if (state !== 'off' && state !== 'lock' && state !== 'passcode') home(); };
+  swipeUp($('#swipezone'), () => { if (state === 'app') home(); else if (state === 'lock') passcode(); });
 
   /* ---------- 앱 틀 ---------- */
   function appView(o) {
@@ -198,8 +211,15 @@
   /* ---------- 전화 ---------- */
   function openPhone(tab) {
     tab = typeof tab === 'string' ? tab : 'recents';
-    const tabs = [['favorites', '★', '즐겨찾기'], ['recents', '◷', '최근 기록'], ['contacts', '☻', '연락처'], ['keypad', '▦', '키패드'], ['voicemail', '◌', '음성 사서함']];
-    const footer = `<div class="tabbar">${tabs.map(t => `<button data-t="${t[0]}" class="${t[0] === tab ? 'on' : ''}"><i>${t[1]}</i>${t[2]}</button>`).join('')}</div>`;
+    const I = {
+      recents: '<svg viewBox="0 0 24 24"><circle cx="12" cy="12" r="10.5" fill="currentColor"/><path d="M12 6.2v6.3H7.6" fill="none" stroke="#fff" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"/></svg>',
+      contacts: '<svg viewBox="0 0 24 24"><circle cx="12" cy="12" r="10.5" fill="currentColor"/><circle cx="12" cy="9.3" r="3.5" fill="#fff"/><path d="M5.6 18.6c1-3.3 3.9-4.6 6.4-4.6s5.4 1.3 6.4 4.6a10 10 0 0 1-12.8 0z" fill="#fff"/></svg>',
+      keypad: '<svg viewBox="0 0 24 24" fill="currentColor">' + [4,12,20].flatMap(y => [4,12,20].map(x => `<circle cx="${x}" cy="${y}" r="2.4"/>`)).join('') + '</svg>'
+    };
+    const tabs = [['recents', '통화'], ['contacts', '연락처'], ['keypad', '키패드']];
+    const badge = D.missedBadge > 0 ? `<span class="badge">${D.missedBadge}</span>` : '';
+    const footer = `<div class="pbar"><div class="tabs">${tabs.map(t => `<button class="tab ${t[0] === tab ? 'on' : ''}" data-t="${t[0]}">${I[t[0]]}${t[0] === 'recents' ? badge : ''}${t[1]}</button>`).join('')}</div>
+      <button class="srch" aria-label="검색"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round"><circle cx="10.5" cy="10.5" r="6.5"/><path d="m15.5 15.5 5 5"/></svg></button></div>`;
     let body = '', large = '', act = '', filter = 'all';
     if (tab === 'recents') {
       large = '최근 기록'; act = '편집';
@@ -220,8 +240,8 @@
     } else {
       large = '음성 사서함'; body = `<div class="empty">음성 사서함 없음</div>`;
     }
-    const v = appView({ large, act, body, footer });
-    v.querySelector('.tabbar').onclick = e => { const b = e.target.closest('button[data-t]'); if (b) openPhone(b.dataset.t); };
+    const v = appView({ large, act, body, footer, cls: 'pbody' });
+    v.querySelector('.pbar .tabs').onclick = e => { const b = e.target.closest('button[data-t]'); if (b) openPhone(b.dataset.t); };
 
     if (tab === 'recents') {
       const draw = () => {
@@ -370,5 +390,5 @@
     };
   }
 
-  off();
+  lock();
 })();

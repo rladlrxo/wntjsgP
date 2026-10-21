@@ -23,7 +23,7 @@ button { font: inherit; color: inherit; border: 0; background: none; padding: 0;
 .bat::after { content: ""; position: absolute; right: -.25em; top: .22em; width: .12em; height: .3em; background: currentColor; border-radius: 0 .1em .1em 0; }
 .bat i { position: absolute; left: .1em; top: .1em; bottom: .1em; width: 90%; max-width: calc(100% - .2em); background: currentColor; border-radius: .14em; }
 .phone.dark-text .status { color: #000; }
-.homeind { position: absolute; z-index: 60; bottom: .55em; left: 50%; transform: translateX(-50%); width: 9.4em; height: .36em; border-radius: .2em; background: #fff; cursor: pointer; transition: background .2s; }
+.homeind { pointer-events: none; position: absolute; z-index: 60; bottom: .55em; left: 50%; transform: translateX(-50%); width: 9.4em; height: .36em; border-radius: .2em; background: #fff; cursor: pointer; transition: background .2s; }
 .homeind::before { content: ""; position: absolute; inset: -.9em -1em; }
 .phone.dark-text .homeind { background: #000; }
 .phone.hidden-ind .homeind { opacity: 0; pointer-events: none; }
@@ -220,3 +220,29 @@ button { font: inherit; color: inherit; border: 0; background: none; padding: 0;
 .ico.img img { width: 100%; height: 100%; display: block; pointer-events: none; }
 .avatar[style*="background-image"] { background-size: cover; background-position: center; }
 .ico.img::after { content: ""; position: absolute; inset: 0; border-radius: 22.4%; box-shadow: inset 0 0 0 1px rgba(255,255,255,.16); pointer-events: none; }
+
+/* ---- 스와이프 영역 / 잠금화면 ---- */
+.swipezone { position: absolute; left: 0; right: 0; bottom: 0; height: 2.5em; z-index: 58; touch-action: none; cursor: pointer; }
+.phone[data-s="home"] .swipezone, .phone[data-s="off"] .swipezone, .phone[data-s="passcode"] .swipezone { pointer-events: none; }
+.lock { touch-action: none; }
+.lock .date { position: absolute; top: 10.9%; width: 100%; margin: 0; transform: translateY(-50%); font-size: 1.55em; font-weight: 600; text-align: center; opacity: .95; }
+.lock .time { position: absolute; top: 18.6%; width: 100%; transform: translateY(-50%); font-size: 7.4em; font-weight: 700; line-height: 1; letter-spacing: -.02em; text-align: center; margin: 0; }
+.lbtn { position: absolute; top: 91%; width: 3.55em; height: 3.55em; border-radius: 50%; transform: translate(-50%, -50%); display: grid; place-items: center;
+  background: radial-gradient(circle at 30% 25%, rgba(255,255,255,.3), rgba(255,255,255,.12) 60%, rgba(255,255,255,.18)); border: 1.5px solid rgba(255,255,255,.4);
+  backdrop-filter: blur(12px); -webkit-backdrop-filter: blur(12px); box-shadow: inset 0 1px 2px rgba(255,255,255,.4); }
+.lbtn svg { width: 1.55em; height: 1.55em; fill: #fff; }
+.phone.lockico .island { width: 10.2em; }
+.phone.lockico .island .lk { display: block; left: 1em; height: 1.3em; width: auto; }
+
+/* ---- 전화 앱 하단 (iOS 26 떠 있는 탭바) ---- */
+.app.pbody .abody { padding-bottom: 8.5em; }
+.pbar { position: absolute; left: .9em; right: .9em; bottom: 2.9em; display: flex; gap: .65em; align-items: center; z-index: 30; }
+.pbar .tabs, .pbar .srch { background: rgba(250,250,252,.84); backdrop-filter: blur(18px) saturate(1.6); -webkit-backdrop-filter: blur(18px) saturate(1.6);
+  box-shadow: 0 .2em 1em rgba(0,0,0,.14), inset 0 0 0 1px rgba(255,255,255,.8); }
+.pbar .tabs { flex: 1; height: 4.3em; border-radius: 2.2em; display: flex; padding: .3em; gap: .1em; }
+.pbar .tab { flex: 1; display: flex; flex-direction: column; align-items: center; justify-content: center; gap: .15em; border-radius: 2em; font-size: .72em; font-weight: 500; color: #1c1c1e; position: relative; }
+.pbar .tab svg { width: 2.1em; height: 2.1em; }
+.pbar .tab.on { color: #0a84ff; background: rgba(120,120,128,.16); }
+.pbar .badge { position: absolute; top: .1em; left: 52%; min-width: 1.9em; height: 1.9em; padding: 0 .45em; border-radius: 1em; background: #ff453a; color: #fff; font-size: 1.05em; font-weight: 600; display: grid; place-items: center; }
+.pbar .srch { width: 4.3em; height: 4.3em; border-radius: 50%; display: grid; place-items: center; color: #1c1c1e; }
+.pbar .srch svg { width: 1.7em; height: 1.7em; }

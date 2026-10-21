@@ -9,6 +9,8 @@
 const DATA = {
   owner: "주선혜",
   passcode: "0223",
+  carrier: "SKT",           // 잠금화면 왼쪽 위에 보이는 통신사
+  missedBadge: 6,           // 전화 앱 '통화' 탭의 빨간 숫자 (0이면 안 보임)
   wallpaper: "",            // 비우면 검은색 단색. 사진을 쓰려면 "images/wall.jpg"
 
   /* ---------- 홈 화면 ----------
