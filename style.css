@@ -49,20 +49,28 @@ button { font: inherit; color: inherit; border: 0; background: none; padding: 0;
 .lock .swipe { position: absolute; bottom: 1.5em; width: 100%; text-align: center; font-size: .8em; opacity: .55; pointer-events: none; }
 .lock .lockico { margin-top: 3.3em; font-size: 1.15em; opacity: .9; }
 
-.passcode { color: #fff; display: flex; flex-direction: column; align-items: center; padding-top: 5.4em; background: rgba(0,0,0,.55); }
-.passcode .ttl { font-size: 1.15em; margin-bottom: 1.2em; }
-.pdots { display: flex; gap: 1.1em; height: 1em; margin-bottom: 3em; }
-.pdots i { width: .85em; height: .85em; border-radius: 50%; border: 1.5px solid #fff; }
+.passcode { color: #fff; background: rgba(0,0,0,.35); }
+.passcode .ttl { position: absolute; top: 20%; width: 100%; text-align: center; transform: translateY(-50%); font-size: 1.3em; font-weight: 300; letter-spacing: .02em; }
+.pdots { position: absolute; top: 24.5%; width: 100%; display: flex; justify-content: center; gap: 1.35em; transform: translateY(-50%); }
+.pdots i { width: .9em; height: .9em; border-radius: 50%; border: 1.5px solid #fff; }
 .pdots i.on { background: #fff; }
 .pdots.shake { animation: shake .4s; }
-@keyframes shake { 15%,55% { transform: translateX(-.8em); } 35%,75% { transform: translateX(.8em); } }
-.keys { display: grid; grid-template-columns: repeat(3, 4.9em); gap: 1.05em 1.35em; }
-.keys button { width: 4.9em; height: 4.9em; border-radius: 50%; background: rgba(255,255,255,.16); color: #fff; display: flex; flex-direction: column; align-items: center; justify-content: center; font-size: 1.1em; line-height: 1; }
-.keys button:active { background: rgba(255,255,255,.45); }
-.keys button b { font-size: 2em; font-weight: 400; }
-.keys button small { font-size: .5em; letter-spacing: .15em; margin-top: .2em; height: 1em; }
-.keys button.plain { background: none; font-size: .95em; }
+@keyframes shake { 15%,55% { transform: translate(-.8em,-50%); } 35%,75% { transform: translate(.8em,-50%); } }
+.keys { position: absolute; top: 39%; left: 50%; transform: translate(-50%, -2.32em); display: grid; grid-template-columns: repeat(3, 4.64em); gap: 1.19em 1.54em; }
+.keys button { width: 4.64em; height: 4.64em; border-radius: 50%; color: #fff; display: flex; flex-direction: column; align-items: center; justify-content: center; line-height: 1; position: relative;
+  background: radial-gradient(circle at 30% 25%, rgba(255,255,255,.34), rgba(255,255,255,.14) 60%, rgba(255,255,255,.2));
+  border: 1.5px solid rgba(255,255,255,.45); backdrop-filter: blur(12px) saturate(1.3); -webkit-backdrop-filter: blur(12px) saturate(1.3);
+  box-shadow: inset 0 1px 2px rgba(255,255,255,.5), 0 .15em .5em rgba(0,0,0,.18); transition: background .08s; }
+.keys button:active { background: rgba(255,255,255,.55); }
+.keys button b { font-size: 2.3em; font-weight: 300; margin-top: -.12em; }
+.keys button small { font-size: .52em; font-weight: 700; letter-spacing: .3em; margin: .15em 0 0 .3em; height: 1em; }
 .keys button.empty { visibility: hidden; }
+.pc-foot { position: absolute; top: 90.6%; transform: translate(-50%,-50%); font-size: 1.05em; color: #fff; font-weight: 400; }
+.island { transition: width .25s ease, height .25s ease; }
+.island .lk, .island .fid { display: none; position: absolute; top: 50%; transform: translateY(-50%); }
+.phone.face .island { width: 12.4em; height: 3.1em; border-radius: 2.4em; }
+.phone.face .island .lk { display: block; left: 1.15em; height: 1.45em; width: auto; }
+.phone.face .island .fid { display: block; right: 1.15em; height: 1.6em; width: auto; }
 
 /* ---------- 홈 화면 ---------- */
 .home { color: #fff; }

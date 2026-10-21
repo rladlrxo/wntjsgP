@@ -51,7 +51,7 @@
 
   /* ---------- 꺼진 화면 ---------- */
   function off() {
-    state = 'off';
+    state = 'off'; phone.classList.remove('face');
     const v = render(`<div class="off" style="position:absolute;inset:0">눌러서 전원 켜기</div>`, '', { hideInd: true });
     v.onclick = lock;
   }
@@ -59,7 +59,7 @@
 
   /* ---------- 잠금화면 ---------- */
   function lock() {
-    state = 'lock';
+    state = 'lock'; phone.classList.remove('face');
     const d = new Date();
     const v = render(`
       <div class="lock wall" style="${wallStyle()}position:absolute;inset:0">
@@ -78,10 +78,10 @@
   const LETTERS = { 2: 'ABC', 3: 'DEF', 4: 'GHI', 5: 'JKL', 6: 'MNO', 7: 'PQRS', 8: 'TUV', 9: 'WXYZ' };
   function passcode() {
     state = 'passcode';
+    phone.classList.add('face');
     const len = D.passcode.length; let val = '';
-    const keys = [1, 2, 3, 4, 5, 6, 7, 8, 9, '', 0, 'x'].map(k => {
+    const keys = [1, 2, 3, 4, 5, 6, 7, 8, 9, '', 0].map(k => {
       if (k === '') return '<button class="empty"></button>';
-      if (k === 'x') return `<button class="plain" data-k="back">취소</button>`;
       return `<button data-k="${k}"><b>${k}</b><small>${LETTERS[k] || ''}</small></button>`;
     }).join('');
     const v = render(`
@@ -89,17 +89,20 @@
         <div class="ttl">암호 입력</div>
         <div class="pdots" id="pdots">${'<i></i>'.repeat(len)}</div>
         <div class="keys">${keys}</div>
+        <button class="pc-foot" style="left:24.7%">긴급 상황</button>
+        <button class="pc-foot" id="pcCancel" style="left:75.2%" data-k="back">취소</button>
       </div>`, '', { hideInd: true });
-    const dots = v.querySelectorAll('#pdots i');
-    function paint() { dots.forEach((el, i) => el.classList.toggle('on', i < val.length)); }
+    const dots = v.querySelectorAll('#pdots i'), cancel = v.querySelector('#pcCancel');
+    function paint() { dots.forEach((el, i) => el.classList.toggle('on', i < val.length)); cancel.textContent = val.length ? '삭제' : '취소'; }
+    function leave() { phone.classList.remove('face'); document.removeEventListener('keydown', onKey); }
     function press(k) {
       if (state !== 'passcode') return;
-      if (k === 'back') { if (val) { val = val.slice(0, -1); paint(); } else lock(); return; }
+      if (k === 'back') { if (val) { val = val.slice(0, -1); paint(); } else { leave(); lock(); } return; }
       if (val.length >= len) return;
       val += k; paint();
       if (val.length === len) {
         setTimeout(() => {
-          if (val === D.passcode) { document.removeEventListener('keydown', onKey); home(); }
+          if (val === D.passcode) { leave(); home(); }
           else {
             const p = $('#pdots'); if (!p) return; p.classList.add('shake');
             setTimeout(() => { val = ''; paint(); p.classList.remove('shake'); }, 420);
@@ -108,6 +111,7 @@
       }
     }
     v.querySelector('.keys').onclick = e => { const b = e.target.closest('button[data-k]'); if (b) press(b.dataset.k); };
+    cancel.onclick = () => press('back');
     function onKey(e) {
       if (state !== 'passcode') { document.removeEventListener('keydown', onKey); return; }
       if (/^[0-9]$/.test(e.key)) press(e.key);
