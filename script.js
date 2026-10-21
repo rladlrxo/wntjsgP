@@ -7,8 +7,12 @@
   let state = 'off';
 
   /* ---------- 크기/상태바 ---------- */
-  function fit() { phone.style.fontSize = (phone.clientWidth / 390 * 16) + 'px'; }
-  window.addEventListener('resize', fit); fit();
+  function fit() {
+    const w = phone.clientWidth, h = phone.clientHeight || w * 2.17;
+    const s = Math.max(Math.min(w / 390, h / 844), 0.9 * w / 390);
+    phone.style.fontSize = (s * 16) + 'px'; phone.style.setProperty('--u', (s * 16) + 'px');
+  }
+  window.addEventListener('resize', fit); window.addEventListener('orientationchange', () => setTimeout(fit, 200)); fit();
 
   function pad2(n) { return String(n).padStart(2, '0'); }
   function tick() {
@@ -276,11 +280,12 @@
     }
   }
 
+  const DEF_AV = '<svg viewBox="0 0 40 40" width="100%" height="100%"><circle cx="20" cy="15.500" r="7" fill="#fff"/><path d="M5 40c1-9 7.500-13 15-13s14 4 15 13z" fill="#fff"/></svg>';
   /* ---------- 문자 ---------- */
   function openMessages() {
     const pins = D.pinned.map(p => `<div class="pin" data-p="${esc(p.id)}"><div class="avatar" ${p.avatar ? `style="background-image:url('${esc(p.avatar)}')"` : ''}>${p.avatar ? '' : esc(p.initial || p.name[0])}</div><span>${esc(p.name)}</span></div>`).join('');
     const rows = D.threads.map((t, i) => `
-      <div class="mrow" data-i="${i}"><div class="avatar">👤</div><div class="mm">
+      <div class="mrow" data-i="${i}"><div class="avatar def">${DEF_AV}</div><div class="mm">
         <div class="mn"><span>${esc(t.name)}</span><span>${fmtRel(t.h)}</span></div>
         <div class="pv">${esc(t.messages[t.messages.length - 1].text.replace(/\n/g, ' '))}</div></div></div>`).join('');
     const v = appView({ act: '편집', large: '메시지', body: `<div class="pins">${pins}</div><div style="background:#fff;border-radius:1em 1em 0 0">${rows}</div>` });
@@ -297,7 +302,7 @@
     const v = appView({
       back: openMessages, backLabel: '', cls: '', white: true,
       mid: '', toBottom: true,
-      body: `<div class="hnav"><div class="avatar" ${avatar ? `style="background-image:url('${esc(avatar)}')"` : ''}>${avatar ? '' : esc(initial || '👤')}</div><small>${esc(name)} ›</small></div><div class="thread">${stamp}${bubbles}</div>`,
+      body: `<div class="hnav"><div class="avatar ${avatar || initial ? '' : 'def'}" ${avatar ? `style="background-image:url('${esc(avatar)}')"` : ''}>${avatar ? '' : (initial ? esc(initial) : DEF_AV)}</div><small>${esc(name)} ›</small></div><div class="thread">${stamp}${bubbles}</div>`,
       footer: `<div class="compose"><span class="plus">＋</span><span class="field">문자 메시지</span></div>`
     });
   }
